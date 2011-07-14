@@ -1,0 +1,125 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Beans;
+
+import Graphs.StationData;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.bean.ManagedBean;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+/**
+ *
+ * @author carlos
+ */
+@ManagedBean
+@ViewScoped
+public class DisplayImagesBean implements Serializable {
+    private ArrayList<SelectItem> availableStations;
+    private String selectedStation;
+    private List<StationData> series;
+    
+    
+    private void prepareGraphs(ArrayList<String> errorFileNames) {
+        String line="";
+        String Name,lon,lat,vReal, vRainrate,vAsim;
+        
+        for(int i =0; i< errorFileNames.size(); i++){
+            try {
+                //We will check whether there is information for this hour
+                if(errorFileNames.get(i).compareTo("Nodata")!=0){
+                    BufferedReader input =  new BufferedReader(new FileReader(new File(errorFileNames.get(i))));
+                    //Read Date and Hour
+                    line = input.readLine();
+                    //Read Headers
+                    line = input.readLine();
+
+                    //Read station per station
+                     while (( line = input.readLine()) != null){
+                         StringTokenizer st = new StringTokenizer(line, ","); 
+                         //Nombre
+                         Name = st.nextToken();
+                         //Longitud
+                         lon = st.nextToken();
+                         //latitud
+                         lat = st.nextToken();
+                         //Valor Real
+                         vReal = st.nextToken();
+                         //Valor Rainrate
+                         vRainrate = st.nextToken();
+                         //Valor Asimilado
+                         vAsim = st.nextToken();
+                      }
+                }                
+            } catch (IOException ex) {
+                Logger.getLogger(DisplayImagesBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+    
+    
+    /** Creates a new instance of DisplayImagesBean */
+    public DisplayImagesBean() {
+        ArrayList<String>errorFiles= (ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("errorFiles");
+        prepareGraphs(errorFiles);
+        availableStations = new ArrayList<SelectItem>();
+        availableStations.add(new SelectItem("1", "Acala"));
+        availableStations.add(new SelectItem("1", "Boqueron"));
+        series = new ArrayList<StationData>();
+        series.add(new StationData(1.0f, 1.1f, 2.0f, 1));
+        series.add(new StationData(2.0f, 2.1f, 3.0f, 2));
+        series.add(new StationData(0.0f, 5.1f, 1.0f, 3));       
+        
+    }
+
+    
+    public void updateStationLineChart(){
+ 
+        for (int i =0; i<series.size(); i++){
+            series.get(i).setRealvalue( series.get(i).getRealvalue()+1);
+        }
+    }
+
+    
+    
+    
+    public List<StationData> getSeries() {
+        return series;
+    }
+
+    public void setSeries(List<StationData> series) {
+        this.series = series;
+    }
+
+    public ArrayList<SelectItem> getAvailableStations() {
+        return availableStations;
+    }
+
+    public void setAvailableStations(ArrayList<SelectItem> availableStations) {
+        this.availableStations = availableStations;
+    }
+
+    public String getSelectedStation() {
+        return selectedStation;
+    }
+
+    public void setSelectedStation(String selectedStation) {
+        this.selectedStation = selectedStation;
+    }
+    
+}

@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Asimilacion</title>
+    </h:head>
+    <h:body>
+        <h:form >
+        <h:panelGroup style="width: 960px; border:0; ">
+            <img     src="img/logomatemP.jpg" align="left"  />
+            <img    src="img/logounamP.jpg" align="right" />
+        </h:panelGroup>
+        <br/><br/><br/><br/><br/><br></br>
+
+        <div> <p:messages id="messages">  
+                <p:effect type="pulsate" event="load">  
+                    <f:param name="mode" value="'show'" />  
+                </p:effect>  
+            </p:messages>  
+        </div>
+
+        <div>                   
+            <a href="#{downloadDataBean.zipTxtFileName}" >Descargar datos</a>
+            <a href="#{downloadDataBean.zipImgFileName}">Descargar Imagenes</a>                                    
+
+        </div>
+        <h:panelGrid columns="2" id="grid">
+            <p:panel>
+                <p:commandButton  title="Hora previa" type="button" onclick="switcher.previous();"  
+                                 image="ui-icon ui-icon-circle-triangle-w"/>  
+                <p:commandButton title="Hora siguiente" type="button" onclick="switcher.next();"  
+                                 image="ui-icon ui-icon-circle-triangle-e"/>  
+                <p:imageSwitch effect="fade" widgetVar="switcher" slideshowAuto="true" >  
+                    <ui:repeat value="#{mainPageBean.asimImages}" var="image1">  
+                        <p:graphicImage value="#{image1}" />  
+                    </ui:repeat>  
+                </p:imageSwitch>              
+            </p:panel>
+            <p:panel header="Comportamiento puntual de las predicciones para cada estación" >
+                <h:selectOneMenu  title="Estación en tierra " value="#{displayImagesBean.selectedStation}"   >
+                    <f:selectItems  value="#{displayImagesBean.availableStations}"  />                                                                          
+                 </h:selectOneMenu>
+                <p:commandButton value="Ver gráfica" update="estacionChart"  actionListener="#{displayImagesBean.updateStationLineChart}" />  
+                <p:lineChart id="estacionChart" value="#{displayImagesBean.series}"  var="stationdata" xfield="#{stationdata.hour}" titleX="Tiempo" titleY="Precipitación">
+                    <p:chartSeries label="ValorReal" value="#{stationdata.realvalue}"/>
+                    <p:chartSeries label="ValorAsimilacion" value="#{stationdata.asimilacionValue}"/>
+                    <p:chartSeries label="ValorRainrate" value="#{stationdata.rainrateValue}" />
+                </p:lineChart>
+                
+            </p:panel>
+
+        </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
