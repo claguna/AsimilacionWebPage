@@ -22,7 +22,7 @@ import org.primefaces.model.map.MapModel;
  *
  * @author carlos
  */
-@ManagedBean
+@ManagedBean(name = "mainPageBean")
 @SessionScoped
 public class MainPageBean extends MainPageALBean implements Serializable {
 

@@ -26,7 +26,7 @@ import javax.faces.context.FacesContext;
  *
  * @author carlos
  */
-@ManagedBean
+@ManagedBean(name = "displayImagesBean")
 @ViewScoped
 public class DisplayImagesBean implements Serializable {
     private ArrayList<SelectItem> availableStations;

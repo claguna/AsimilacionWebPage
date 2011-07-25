@@ -46,13 +46,9 @@ public class MainPageALBean {
     public ArrayList<String> asimilacionfiles;
     public ArrayList<DefaultStreamedContent> images;
     public ArrayList<String> asimImages;
-    
-
     private static int BUFFER_SIZE = 512;
-    
-    public Integer progress=0;
-
-   private String errorMessages = "Mensajes de notificación <br>\n";
+    public Integer progress = 0;
+    private String errorMessages = "Mensajes de notificación <br>\n";
 
     public void addMessage(FacesMessage message) {
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -88,7 +84,7 @@ public class MainPageALBean {
             String deploymentDirectoryPath = ctx.getRealPath("/");
             String dirExe = deploymentDirectoryPath + "Asimilacion/asimilacion2";
             int returncode = 0;
-            
+
             String arg = "--a1 --fpolygon " + deploymentDirectoryPath + polygonFileName + "  --date " + date + " --hour " + hour + " --outputdir " + deploymentDirectoryPath;
             String args[] = {"bash", "-c", dirExe + " " + arg};
             Process process = null;
@@ -131,10 +127,13 @@ public class MainPageALBean {
     public String gmailPolygon() {
         FileWriter outFile = null;
         try {
-            String msg = "";
+            String startDate_s, startHour_s, endDate_s, endHour_s;
             Calendar sdate = Calendar.getInstance();
             Calendar edate = Calendar.getInstance();
             ArrayList<String> hours = new ArrayList<String>();
+            ArrayList<String> errorAnalysisFiles = new ArrayList<String>();
+            Boolean thereAreErrors = false;
+            String msg = "";
             ArrayList<String> images = new ArrayList<String>();
             if (startDate != null && endDate != null) {
                 msg = "Entrando al action " + startDate.toString() + " " + startHour + " " + endDate.toString() + " " + endHour;
@@ -162,11 +161,71 @@ public class MainPageALBean {
             edate.add(Calendar.MONTH, 1);
             hours = getHoursInInterval(sdate, edate);
             // For each hour Run Asimilacion
+            String imgAsimilacion = "";
+            String fileAsimilacion = "";
+            String fileEst = "";
+            String errorFile = "";
+            String tmp_Date, tmp_Hour;
+            progress = 5;
+            errorMessages = "";
             for (String h : hours) {
-                images.add(h + ".jpeg");
-                Asimilacion(h.substring(0, 10), h.substring(10, 12), h + ".jpeg", "/tmp/polygon.txt");
+                tmp_Date = h.substring(0, 10);
+                tmp_Hour = h.substring(10, h.length());
+                imgAsimilacion = Asimilacion(tmp_Date, tmp_Hour, h + ".jpeg", "/tmp/polygon.txt");
+                progress += 100 / hours.size();
+                errorFile = "Nodata";
+                if (imgAsimilacion.compareTo("") != 0) {
+                    tmp_Hour = tmp_Hour.trim();
+                    fileAsimilacion = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date + "_" + tmp_Hour + ".a1.debug";
+                    fileEst = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date + tmp_Hour + "_0.hr.rrtmp.est";
+                    errorFile = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date + "_" + tmp_Hour + ".errorAnalysis.csv";
+                    asimImages.add(imgAsimilacion);
+                    asimilacionfiles.add(fileAsimilacion);
+                    asimilacionfiles.add(fileEst);
+                    asimilacionfiles.add(errorFile);
+
+                } else {
+                    errorMessages += "No hay datos para la hora " + h + "\n </br>";
+                    thereAreErrors = true;
+                }
+                errorAnalysisFiles.add(errorFile);
             }
-            return "tmp";
+
+            //Save error messages
+            if (thereAreErrors == false) {
+                errorMessages += "No hubo ningún error <br>\n";
+            }
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            //Clean Previous info
+            if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().containsKey("ziptxtFilesName")) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ziptxtFilesName");
+            }
+
+            if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().containsKey("zipimgFilesName")) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("zipimgFilesName");
+            }
+            if (asimilacionfiles.size() > 0) {
+                //Save files into Session
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("txtFiles", asimilacionfiles);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ImgFiles", asimImages);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("errorFiles", errorAnalysisFiles);
+                //Compress files
+                startDate_s = hours.get(0).substring(0, 10);
+                startHour_s = hours.get(0).substring(10, hours.get(0).length()).trim();
+                endDate_s = hours.get(hours.size() - 1).substring(0, 10);
+                endHour_s = hours.get(hours.size() - 1).substring(10, hours.get(hours.size() - 1).length()).trim();
+                String zipimg = AsimilacionUtils.compressAsimilacionImages(asimImages, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
+                String ziptxt = AsimilacionUtils.compressAsimilacionTxt(asimilacionfiles, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
+
+                //Save Compressed files into session             
+
+
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ziptxtFilesName", ziptxt);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("zipimgFilesName", zipimg);
+            }
+
+            return "displayImages";
         } catch (IOException ex) {
             Logger.getLogger(MainPageALBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -246,28 +305,29 @@ public class MainPageALBean {
         String imgAsimilacion = "";
         String fileAsimilacion = "";
         String fileEst = "";
-        String errorFile="";
-        
+        String errorFile = "";
+
         asimImages.clear();
         asimilacionfiles.clear();
         String tmp_Date, tmp_Hour;
-        progress = 5;  errorMessages ="";
+        progress = 5;
+        errorMessages = "";
         for (String h : hours) {
             tmp_Date = h.substring(0, 10);
-            tmp_Hour = h.substring(10, h.length());            
-            imgAsimilacion = Asimilacion(tmp_Date, tmp_Hour, h + ".jpeg", "Asimilacion/AsimilacionConf/allWindowPolygon");            
-            progress +=100/hours.size();
-            errorFile="Nodata";
+            tmp_Hour = h.substring(10, h.length());
+            imgAsimilacion = Asimilacion(tmp_Date, tmp_Hour, h + ".jpeg", "Asimilacion/AsimilacionConf/allWindowPolygon");
+            progress += 100 / hours.size();
+            errorFile = "Nodata";
             if (imgAsimilacion.compareTo("") != 0) {
-                tmp_Hour = tmp_Hour.trim();                
+                tmp_Hour = tmp_Hour.trim();
                 fileAsimilacion = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date + "_" + tmp_Hour + ".a1.debug";
                 fileEst = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date + tmp_Hour + "_0.hr.rrtmp.est";
-                errorFile = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date +"_"+ tmp_Hour + ".errorAnalysis.csv";
+                errorFile = "Data/" + tmp_Date.replace("-", "_") + "_" + tmp_Hour + "/" + tmp_Date + "_" + tmp_Hour + ".errorAnalysis.csv";
                 asimImages.add(imgAsimilacion);
                 asimilacionfiles.add(fileAsimilacion);
                 asimilacionfiles.add(fileEst);
                 asimilacionfiles.add(errorFile);
-                
+
             } else {
                 errorMessages += "No hay datos para la hora " + h + "\n </br>";
                 thereAreErrors = true;
@@ -311,9 +371,10 @@ public class MainPageALBean {
 
         return "displayImages";
     }
-      public String nextWindow() {
-          FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
-          FacesContext.getCurrentInstance().addMessage(null, message);
-          return "displayImages";
-      }
+
+    public String nextWindow() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        return "displayImages";
+    }
 }

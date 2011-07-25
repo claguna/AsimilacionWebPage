@@ -19,7 +19,7 @@ import javax.servlet.ServletContext;
  *
  * @author carlos
  */
-@ManagedBean
+@ManagedBean(name = "downloadDataBean")
 @ViewScoped
 public class DownloadDataBean extends DownloadDataALBean implements Serializable{
 

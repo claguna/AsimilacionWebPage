@@ -86,7 +86,7 @@ function bindEventsHighlights() {
     </script>
     </h:head>
     
-    <h:body onload="startButton1.enable(); nextButton.disable();">
+    <h:body onload="startButton1.enable(); nextButton.disable();nextButton1.disable();">
         <h:form onsubmit="">
             <h:panelGroup style="width: 960px; border:0; ">
                  <img     src="img/logomatemP.jpg" align="left"  />
@@ -144,14 +144,18 @@ function bindEventsHighlights() {
                                         overlaySelectListener="#{mainPageBean.emptyModel}"  />  
                                 </f:view>
                                                                
-                                <p:commandButton value="Continuar"  disabled="true" ajax ="false" action="#{mainPageBean.gmailPolygon}"/>
-                                        
+                                <p:commandButton value="Continuar"  disabled="false" ajax ="false" action="#{mainPageBean.gmailPolygon}" onclick="pbAjax1.start();startButton2.disable();"    widgetVar="startButton2"/>
+                                <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton1" />
+                                    <h:outputLabel  value="Progreso" /> 
+                                    
+                                    <p:progressBar widgetVar="pbAjax1" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton2.enable();nextButton1.enable();" interval="4000"  />
+                                         
                                     <br/><br/><br/>
                                     <h:outputText id="mensaje" value="#{mainPageBean.mensaje}"/>
                                             <p:dialog widgetVar="dlg" effect="FADE" effectDuration="0.5" close="false" fixedCenter="true">                                                    
                                                             <h:panelGrid columns="2">
                                                                     <h:outputLabel for="title" value="Title:" />
-                                                                    <p:inputText id="title" value="asas" />
+                                                                    <p:inputText id="title" value="Añadir punto" />
 
                                                                     <f:facet name="footer">
                                                                             <p:commandButton value="Add" 

@@ -11,7 +11,7 @@ import javax.faces.bean.ViewScoped;
  *
  * @author carlos
  */
-@ManagedBean
+@ManagedBean(name = "mainPageViewBean")
 @ViewScoped
 public class MainPageViewBean {
     String allWindowButton;
