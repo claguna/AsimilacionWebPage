@@ -144,7 +144,9 @@ public class MainPageALBean {
             Logger.getLogger(MainPageBean.class.getCanonicalName()).info(msg);
 
             //Write Polygon
-            outFile = new FileWriter("/tmp/polygon.txt");
+            ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+            String deploymentDirectoryPath = ctx.getRealPath("/");
+            outFile = new FileWriter(deploymentDirectoryPath+"/tmp/polygon.txt");
             PrintWriter fpol = new PrintWriter(outFile);
             for (Point2D.Double p : polygon) {
                 fpol.println(p.getY() + " " + p.getX());
@@ -168,6 +170,8 @@ public class MainPageALBean {
             String tmp_Date, tmp_Hour;
             progress = 5;
             errorMessages = "";
+            asimImages.clear();
+            asimilacionfiles.clear();
             for (String h : hours) {
                 tmp_Date = h.substring(0, 10);
                 tmp_Hour = h.substring(10, h.length());

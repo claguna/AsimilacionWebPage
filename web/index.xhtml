@@ -18,8 +18,8 @@
 	
 	function handlePointClick(event) {
 		if(currentMarker == null) {
-			document.getElementById('j_idt7:lat').value = event.latLng.lat();
-			document.getElementById('j_idt7:lng').value = event.latLng.lng();
+			document.getElementById('j_idt11:lat').value = event.latLng.lat();
+			document.getElementById('j_idt11:lng').value = event.latLng.lng();
 
 			currentMarker = new google.maps.Marker({
 				position:new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
@@ -137,14 +137,14 @@ function bindEventsHighlights() {
                                 <p:growl id="growl" life="3000"/> 
                                 
                                 <f:view contentType="text/html">
-                                    <p:gmap center="17.81542, -93.122893" disableDoubleClickZoom="true" zoom="7" type="TERRAIN"   
+                                    <p:gmap center="16.11542, -95.122893" disableDoubleClickZoom="true" zoom="7" type="TERRAIN"   
                                         style="width:600px;height:400px"   
                                         mapTypeControl="false" navigationControl="false" model="#{mainPageBean.emptyModel}" 
                                         onPointClick="handlePointClick(event);"  widgetVar="map" streetView="false"
                                         overlaySelectListener="#{mainPageBean.emptyModel}"  />  
                                 </f:view>
-                                                               
-                                <p:commandButton value="Continuar"  disabled="false" ajax ="false" action="#{mainPageBean.gmailPolygon}" onclick="pbAjax1.start();startButton2.disable();"    widgetVar="startButton2"/>
+                                                              
+                                <p:commandButton value="Continuar" actionListener="#{mainPageBean.gmailPolygon}" onclick="pbAjax1.start();startButton2.disable();"    widgetVar="startButton2"/>
                                 <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton1" />
                                     <h:outputLabel  value="Progreso" /> 
                                     

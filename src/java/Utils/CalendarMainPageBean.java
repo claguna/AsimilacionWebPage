@@ -5,6 +5,7 @@
 package Utils;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.StringTokenizer;
 import javax.faces.bean.ManagedBean;
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
  */
 @ManagedBean(name = "calendarMainPageBean")
 @ViewScoped
-public class CalendarMainPageBean {
+public class CalendarMainPageBean implements Serializable{
  private Date date;
  
  private String getDatesJSONFormat(ArrayList<String> dates){

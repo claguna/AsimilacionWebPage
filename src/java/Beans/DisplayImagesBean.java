@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -33,6 +34,34 @@ public class DisplayImagesBean implements Serializable {
     private String selectedStation;
     private List<StationData> series;
     
+     public StreamedContent file;  
+    public String zipTxtFileName, zipImgFileName;
+
+    public StreamedContent getFile() {  
+        return file;  
+    }
+
+    public String getZipImgFileName() {
+        return zipImgFileName;
+    }
+
+    public void setZipImgFileName(String zipImgFileName) {
+        this.zipImgFileName = zipImgFileName;
+    }
+
+    public String getZipTxtFileName() {
+        return zipTxtFileName;
+    }
+
+    public void setZipTxtFileName(String zipTxtFileName) {
+        this.zipTxtFileName = zipTxtFileName;
+    }
+  
+    public void setFile(StreamedContent file) {  
+        this.file = file;  
+    }  
+
+
     
     private void prepareGraphs(ArrayList<String> errorFileNames) {
         String line="";
@@ -75,8 +104,12 @@ public class DisplayImagesBean implements Serializable {
     
     /** Creates a new instance of DisplayImagesBean */
     public DisplayImagesBean() {
+       zipTxtFileName =  (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ziptxtFilesName");
+       zipImgFileName = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("zipimgFilesName");
+
         ArrayList<String>errorFiles= (ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("errorFiles");
-        prepareGraphs(errorFiles);
+       // if(errorFiles!=null)
+         //   prepareGraphs(errorFiles);
         availableStations = new ArrayList<SelectItem>();
         availableStations.add(new SelectItem("1", "Acala"));
         availableStations.add(new SelectItem("1", "Boqueron"));
