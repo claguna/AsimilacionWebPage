@@ -4,7 +4,7 @@
  */
 package Beans;
 
-import Utils.AsimilacionUtils;
+import Utils.MainPageUtils;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +26,7 @@ import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
@@ -49,7 +50,8 @@ public class MainPageALBean {
     private static int BUFFER_SIZE = 512;
     public Integer progress = 0;
     private String errorMessages = "Mensajes de notificación <br>\n";
-
+    public DualListModel<String> cuencaslist;
+    
     public void addMessage(FacesMessage message) {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -134,7 +136,7 @@ public class MainPageALBean {
             ArrayList<String> errorAnalysisFiles = new ArrayList<String>();
             Boolean thereAreErrors = false;
             String msg = "";
-            ArrayList<String> images = new ArrayList<String>();
+            ArrayList<String> images = new ArrayList<String>();            
             if (startDate != null && endDate != null) {
                 msg = "Entrando al action " + startDate.toString() + " " + startHour + " " + endDate.toString() + " " + endHour;
             }
@@ -149,7 +151,13 @@ public class MainPageALBean {
             outFile = new FileWriter(deploymentDirectoryPath+"/tmp/polygon.txt");
             PrintWriter fpol = new PrintWriter(outFile);
             for (Point2D.Double p : polygon) {
-                fpol.println(p.getY() + " " + p.getX());
+                fpol.println(p.getY() + " " + p.getX());                
+            }
+            for(int i =0; i< cuencaslist.getTarget().size();i++){                 
+                 ArrayList<String> cuencaStations = MainPageUtils.getCoordinatesOfStations(cuencaslist.getTarget().get(i));
+                 for(int j =0; j < cuencaStations.size(); j++){
+                     fpol.println(cuencaStations.get(j));                
+                 }
             }
             fpol.close();
 
@@ -219,8 +227,8 @@ public class MainPageALBean {
                 startHour_s = hours.get(0).substring(10, hours.get(0).length()).trim();
                 endDate_s = hours.get(hours.size() - 1).substring(0, 10);
                 endHour_s = hours.get(hours.size() - 1).substring(10, hours.get(hours.size() - 1).length()).trim();
-                String zipimg = AsimilacionUtils.compressAsimilacionImages(asimImages, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
-                String ziptxt = AsimilacionUtils.compressAsimilacionTxt(asimilacionfiles, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
+                String zipimg = MainPageUtils.compressAsimilacionImages(asimImages, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
+                String ziptxt = MainPageUtils.compressAsimilacionTxt(asimilacionfiles, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
 
                 //Save Compressed files into session             
 
@@ -363,8 +371,8 @@ public class MainPageALBean {
             startHour_s = hours.get(0).substring(10, hours.get(0).length()).trim();
             endDate_s = hours.get(hours.size() - 1).substring(0, 10);
             endHour_s = hours.get(hours.size() - 1).substring(10, hours.get(hours.size() - 1).length()).trim();
-            String zipimg = AsimilacionUtils.compressAsimilacionImages(asimImages, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
-            String ziptxt = AsimilacionUtils.compressAsimilacionTxt(asimilacionfiles, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
+            String zipimg = MainPageUtils.compressAsimilacionImages(asimImages, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
+            String ziptxt = MainPageUtils.compressAsimilacionTxt(asimilacionfiles, startDate_s.replace("-", "_") + "_" + startHour_s, endDate_s.replace("-", "_") + "_" + endHour_s);
 
             //Save Compressed files into session             
 
@@ -380,5 +388,19 @@ public class MainPageALBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
         FacesContext.getCurrentInstance().addMessage(null, message);
         return "displayImages";
+    }
+
+    /**
+     * @return the cuencaslist
+     */
+    public DualListModel<String> getCuencaslist() {
+        return cuencaslist;
+    }
+
+    /**
+     * @param cuencaslist the cuencaslist to set
+     */
+    public void setCuencaslist(DualListModel<String> cuencaslist) {
+        this.cuencaslist = cuencaslist;
     }
 }

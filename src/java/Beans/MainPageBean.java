@@ -4,9 +4,12 @@
  */
 package Beans;
 
+import Utils.MainPageUtils;
+import Utils.Stations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -15,8 +18,11 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.DateSelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 
 /**
  *
@@ -156,7 +162,7 @@ public class MainPageBean extends MainPageALBean implements Serializable {
        //images.add("algo.jpg");
 //        images.add("tree-frog.jpg");
         
-        emptyModel = new DefaultMapModel();
+        emptyModel = new DefaultMapModel();      
         cuencas.add("Chicoasen");
         
         availableHours = new ArrayList<SelectItem>();
@@ -185,7 +191,19 @@ public class MainPageBean extends MainPageALBean implements Serializable {
         availableHours.add(new SelectItem("22", "22:00"));
         availableHours.add(new SelectItem("23", "23:00"));
         
-        
+         //Cities  
+        List<String> cuencasSource = new ArrayList<String>();  
+        List<String> cuencasTarget = new ArrayList<String>();  
+        List<Stations> stations = MainPageUtils.getStations();
+         cuencasTarget = MainPageUtils.getCuencas();            
+        cuencaslist = new DualListModel<String>(cuencasSource, cuencasTarget); 
+         //LatLng coord= new LatLng(16.11542, -95.122893);
+         //emptyModel.addOverlay(new Marker(coord, "Konyaalti"));
+        for (int i = 0 ; i< stations.size(); i++){
+            LatLng coord = new LatLng(Double.valueOf(stations.get(i).getY()), Double.valueOf(stations.get(i).getX()));  
+             emptyModel.addOverlay(new Marker(coord , stations.get(i).getName()));  
+        }
+             
     }
     
     

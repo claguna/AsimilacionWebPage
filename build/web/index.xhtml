@@ -4,217 +4,218 @@
       xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
-    
+
     <h:head>
         <title>Asimilacion</title>
-         <script src="http://maps.google.com/maps/api/js?sensor=false" />
-         	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/datepicker.js"></script>
-    <script type="text/javascript" src="js/eye.js"></script>
-    <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/layout.js?ver=1.0.2"></script>
-<script type="text/javascript">
-	var currentMarker = null;
+        <script src="http://maps.google.com/maps/api/js?sensor=false" />
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/datepicker.js"></script>
+        <script type="text/javascript" src="js/eye.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/layout.js?ver=1.0.2"></script>
+        <script type="text/javascript">
+                var currentMarker = null;
 	
-	function handlePointClick(event) {
-		if(currentMarker == null) {
-			document.getElementById('j_idt11:lat').value = event.latLng.lat();
-			document.getElementById('j_idt11:lng').value = event.latLng.lng();
+                function handlePointClick(event) {
+                        if(currentMarker == null) {
+                                document.getElementById('j_idt11:lat').value = event.latLng.lat();
+                                document.getElementById('j_idt11:lng').value = event.latLng.lng();
 
-			currentMarker = new google.maps.Marker({
-				position:new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
-			});
+                                currentMarker = new google.maps.Marker({
+                                        position:new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())
+                                });
 							
-			map.addOverlay(currentMarker);
+                                map.addOverlay(currentMarker);
 
-			dlg.show();
-		}	
-	}
+                                dlg.show();
+                        }	
+                }
 
-	function markerAddComplete() {
+                function markerAddComplete() {
 		
-		currentMarker.setTitle("titulo");		
+                        currentMarker.setTitle("titulo");		
 
-		currentMarker = null;
-		dlg.hide();
-	}
+                        currentMarker = null;
+                        dlg.hide();
+                }
 
-	function cancel() {
-		dlg.hide();
-		currentMarker.setMap(null);
-		currentMarker = null;
+                function cancel() {
+                        dlg.hide();
+                        currentMarker.setMap(null);
+                        currentMarker = null;
 
-		return false;
-	}
-</script>
-					
+                        return false;
+                }
+        </script>
+
         <style type="text/css">
-      .highlight-calendar a {
-        font-weight:bold !important;
-        color: red !important; /*for development purposes*/
-      }
-    </style> 
-    <h:outputScript library="js" name="fcalendars.js"  />
-    
-    <script type="text/javascript">
-        function highlightCalendar(specialDays, date, cssClass) {
-	var d = date.getDate();
-	var m = date.getMonth() + 1;
-	var y = date.getFullYear();
-	
-	if ( (specialDays[y])  &amp;&amp; (specialDays[y][m])  &amp;&amp; (specialDays[y][m][d])) {
-		var s = specialDays[y][m][d];
-		return [ true, cssClass, '' ];
-	}
-	
-	return [ true, '' ]; // no change
-}
+            .highlight-calendar a {
+                font-weight:bold !important;
+                color: red !important; /*for development purposes*/
+            }
+        </style> 
+        <h:outputScript library="js" name="fcalendars.js"  />
 
-/**
- * Binds the event beforeShowDay to every calendar found
- */
-function bindEventsHighlights() {
-    jQuery(".hasDatepicker").datepicker("option", "beforeShowDay", function (date) {
-        return highlightCalendar(specialDays, date, 'highlight-calendar');
-    });
-}
-      var specialDays;
-      jQuery(function () {
-      	  specialDays = <h:outputText value = "#{calendarMainPageBean.dates }" /> ;
-      	  window.setTimeout('bindEventsHighlights()',500);
-      });
-    </script>
+        <script type="text/javascript">
+            function highlightCalendar(specialDays, date, cssClass) {
+            var d = date.getDate();
+            var m = date.getMonth() + 1;
+            var y = date.getFullYear();
+	
+            if ( (specialDays[y])  &amp;&amp; (specialDays[y][m])  &amp;&amp; (specialDays[y][m][d])) {
+                    var s = specialDays[y][m][d];
+                    return [ true, cssClass, '' ];
+            }
+	
+            return [ true, '' ]; // no change
+    }
+
+    /**
+     * Binds the event beforeShowDay to every calendar found
+     */
+    function bindEventsHighlights() {
+        jQuery(".hasDatepicker").datepicker("option", "beforeShowDay", function (date) {
+            return highlightCalendar(specialDays, date, 'highlight-calendar');
+        });
+    }
+          var specialDays;
+          jQuery(function () {
+              specialDays = <h:outputText value = "#{calendarMainPageBean.dates }" /> ;
+              window.setTimeout('bindEventsHighlights()',500);
+          });
+        </script>
     </h:head>
-    
+
     <h:body onload="startButton1.enable(); nextButton.disable();nextButton1.disable();">
         <h:form onsubmit="">
             <h:panelGroup style="width: 960px; border:0; ">
-                 <img     src="img/logomatemP.jpg" align="left"  />
-                  <img    src="img/logounamP.jpg" align="right" />
+                <img     src="img/logomatemP.jpg" align="left"  />
+                <img    src="img/logounamP.jpg" align="right" />
             </h:panelGroup>
-            
-            <br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+
+            <br></br><br></br><br></br><br></br><br></br><br></br>
             <p:panel  header="Asimilacion"  >
-                
-                Este proyecto se enmarca dentro de un convenio entre el Instituto de Matemáticas y el Instituto de Ingeniería de la UNAM. 
-                El objetivo del mismo es la integración de un proceso de asimilación de datos sobre los modelos de predicción del Instituto de Ingeniería 
-                para los niveles de los ríos en la zona de Villahermosa, Tabasco. 
-                La finalidad última de este trabajo consiste en establecer un mecanismo de protección y alarma para posibles inundaciones en la zona de Villahermosa.
+
+
 
             </p:panel>
-            
-            
-                <h:panelGrid columns="2" id="grid" >
-                    <p:panel header="Seleccione la fecha inicial y final"><br></br><br></br>
+
+
+            <h:panelGrid columns="2" id="grid" >
+                <p:panel header="Seleccione la fecha inicial y final"><br></br>
                     <h:panelGrid columns="4" width="550" >
-                                    <h:outputLabel>Fecha Inicial </h:outputLabel>
-                                    <p:calendar id="startCalendar" navigator="true" required="false"  requiredMessage="Fecha Inicial es requerida" value="#{mainPageBean.startDate}"  pattern="dd/MM/yyyy" selectListener="#{mainPageBean.handleAgendaDateChange}" />                                     
-                                    <h:outputLabel>Fecha Final </h:outputLabel>                                    
-                                    <p:calendar  id="endCalendar" navigator="true" required="false" requiredMessage="Fecha final es requerida" value="#{mainPageBean.endDate}"  pattern="dd/MM/yyyy"  />                                      
-                                     
-                                    <h:outputLabel>Hora Inicial </h:outputLabel>
-                                     <h:selectOneMenu value="#{mainPageBean.startHour}">
-                                         <f:selectItems value="#{mainPageBean.availableHours}" />                                         
-                                     </h:selectOneMenu>                                    
-                                     <h:outputLabel>Hora Final </h:outputLabel>
-                                     <h:selectOneMenu  value="#{mainPageBean.endHour}"  >
-                                     <f:selectItems value="#{mainPageBean.availableHours}" />                                                                          
-                                    </h:selectOneMenu>
-                                    
-                                    <p:message for="endCalendar" />   
-                                     <p:message for="startCalendar" />                                                                          
-                                                                         
-                            </h:panelGrid>
-                        <br></br><br></br>
-                        <h:outputLabel>A continuación se muestran los días disponibles en rojo</h:outputLabel>
-                        <br></br><br></br>
-                        <p:calendar  mode="inline" navigator="true" pages="3" value="#{calendarMainPageBean.date }" />                      
-                        <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                        </p:panel>
-                    <p:panel  >
-                        <p:tabView collapsible="true">        
-                            <p:tab title="Poligono desde google maps">
-                                <p:growl id="growl" life="3000"/> 
-                                
-                                <f:view contentType="text/html">
-                                    <p:gmap center="16.11542, -95.122893" disableDoubleClickZoom="true" zoom="7" type="TERRAIN"   
+                        <h:outputLabel>Fecha Inicial </h:outputLabel>
+                        <p:calendar id="startCalendar" navigator="true" required="false"  requiredMessage="Fecha Inicial es requerida" value="#{mainPageBean.startDate}"  pattern="dd/MM/yyyy" selectListener="#{mainPageBean.handleAgendaDateChange}" />                                     
+                        <h:outputLabel>Fecha Final </h:outputLabel>                                    
+                        <p:calendar  id="endCalendar" navigator="true" required="false" requiredMessage="Fecha final es requerida" value="#{mainPageBean.endDate}"  pattern="dd/MM/yyyy"  />                                      
+
+                        <h:outputLabel>Hora Inicial </h:outputLabel>
+                        <h:selectOneMenu value="#{mainPageBean.startHour}">
+                            <f:selectItems value="#{mainPageBean.availableHours}" />                                         
+                        </h:selectOneMenu>                                    
+                        <h:outputLabel>Hora Final </h:outputLabel>
+                        <h:selectOneMenu  value="#{mainPageBean.endHour}"  >
+                            <f:selectItems value="#{mainPageBean.availableHours}" />                                                                          
+                        </h:selectOneMenu>
+
+                        <p:message for="endCalendar" />   
+                        <p:message for="startCalendar" />                                                                          
+
+                    </h:panelGrid>
+                    <br></br>
+                    <h:outputLabel>A continuación se muestran los días disponibles en rojo</h:outputLabel>
+                    <br></br><br></br>
+                    <p:calendar  mode="inline" navigator="true" pages="3" value="#{calendarMainPageBean.date }" />                      
+                    <br></br>
+
+                    <h:outputLabel>Seleccione las cuencas que se van a considerar para correr asimilación</h:outputLabel>
+                    <p:pickList value="#{mainPageBean.cuencaslist}"  var="cuenca"  itemLabel="#{cuenca}"  itemValue="#{cuenca}" />  
+
+                </p:panel>
+                <p:panel  >
+                    <p:tabView collapsible="true">        
+                        <p:tab title="Poligono desde google maps">
+                            <p:growl id="growl" life="3000"/> 
+
+                            <f:view contentType="text/html">
+                                <p:gmap center="16.11542, -95.122893" disableDoubleClickZoom="true" zoom="7" type="TERRAIN"   
                                         style="width:600px;height:400px"   
                                         mapTypeControl="false" navigationControl="false" model="#{mainPageBean.emptyModel}" 
                                         onPointClick="handlePointClick(event);"  widgetVar="map" streetView="false"
                                         overlaySelectListener="#{mainPageBean.emptyModel}"  />  
-                                </f:view>
-                                                              
-                                <p:commandButton value="Continuar" actionListener="#{mainPageBean.gmailPolygon}" onclick="pbAjax1.start();startButton2.disable();"    widgetVar="startButton2"/>
-                                <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton1" />
-                                    <h:outputLabel  value="Progreso" /> 
-                                    
-                                    <p:progressBar widgetVar="pbAjax1" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton2.enable();nextButton1.enable();" interval="4000"  />
-                                         
-                                    <br/><br/><br/>
-                                    <h:outputText id="mensaje" value="#{mainPageBean.mensaje}"/>
-                                            <p:dialog widgetVar="dlg" effect="FADE" effectDuration="0.5" close="false" fixedCenter="true">                                                    
-                                                            <h:panelGrid columns="2">
-                                                                    <h:outputLabel for="title" value="Title:" />
-                                                                    <p:inputText id="title" value="Añadir punto" />
+                            </f:view>
+                            <br></br>                             
+                            <p:commandButton value="Continuar" actionListener="#{mainPageBean.gmailPolygon}" onclick="pbAjax1.start();startButton2.disable();"    widgetVar="startButton2"/>
+                            <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton1" />
+                            <h:outputLabel  value="Progreso" /> 
+                            <br></br>     <br></br> 
+                            <p:progressBar widgetVar="pbAjax1" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton2.enable();nextButton1.enable();" interval="4000"  />
 
-                                                                    <f:facet name="footer">
-                                                                            <p:commandButton value="Add" 
-                                                                                             actionListener="#{mainPageBean.addMarker}" 
-                                                                                            update="messages" 
-                                                                                            oncomplete="markerAddComplete()"/>
-                                                                            <p:commandButton value="Cancel" onclick="return cancel()"/>
-                                                                    </f:facet>
-                                                            </h:panelGrid>
+                            <br/>
+                            <h:outputText id="mensaje" value="#{mainPageBean.mensaje}"/>
+                            <p:dialog widgetVar="dlg" effect="FADE" effectDuration="0.5" close="false" fixedCenter="true">                                                    
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel for="title" value="Title:" />
+                                    <p:inputText id="title" value="Añadir punto" />
 
-                                                <h:inputHidden id="lat" value="#{mainPageBean.lat}" />
-                                                <h:inputHidden id="lng" value="#{mainPageBean.lon}" />                                                    
-                                            </p:dialog>
-                                
-                            </p:tab>
-                            
-                            <p:tab title="Cuenca predefinida">  
-                                
-                                <h:selectOneMenu>
-                                    <f:selectItems value="#{mainPageBean.cuencas}" />
-                                    </h:selectOneMenu>
-                                
-                                <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                            </p:tab>  
-
-                            <p:tab title="Poligono definido por el usuario">  
-                                                                
-                                  <h:panelGrid columns="2" cellpadding="10">  
-                                      <h:outputText value="Se debe seleccionar un archivo de texto separado por comas (csv) que contenga
-                                                    los puntos (x , y) ordenados consecutivamente. "/>
-                                      <p:growl id="messages" showDetail="true"/>  
-                                    
-                                      <p:fileUpload fileUploadListener="#{mainPageBean.handleFileUpload}"   
-                                        allowTypes="*.*;" description="Images"  update="messages"/>                                    
-                                </h:panelGrid>                                  
-                                <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                               <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                            </p:tab>  
-
-                            <p:tab title="Toda la ventana disponible">  
-                                <h:panelGrid columns="2" cellpadding="10">  
-                                    <p:commandButton  value="Calcular" actionListener="#{mainPageBean.allAvailableWindow}" onclick="pbAjax.start();startButton1.disable();"    widgetVar="startButton1" update="grid"/>
-                                    <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton" />
-                                    <h:outputLabel  value="Progreso" /> 
-                                    
-                                    <p:progressBar widgetVar="pbAjax" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton1.enable();nextButton.enable();" interval="4000"  />
-                                   
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Add" 
+                                                         actionListener="#{mainPageBean.addMarker}" 
+                                                         update="messages" 
+                                                         oncomplete="markerAddComplete()"/>
+                                        <p:commandButton value="Cancel" onclick="return cancel()"/>
+                                    </f:facet>
                                 </h:panelGrid>
-                                <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                                <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                            </p:tab>  
 
-                        </p:tabView>  
-                        
-                        
-                     </p:panel>
+                                <h:inputHidden id="lat" value="#{mainPageBean.lat}" />
+                                <h:inputHidden id="lng" value="#{mainPageBean.lon}" />                                                    
+                            </p:dialog>
+
+                        </p:tab>
+
+                        <p:tab title="Cuenca predefinida">  
+
+                            <h:selectOneMenu>
+                                <f:selectItems value="#{mainPageBean.cuencas}" />
+                            </h:selectOneMenu>
+
+                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                        </p:tab>  
+
+                        <p:tab title="Poligono definido por el usuario">  
+
+                            <h:panelGrid columns="2" cellpadding="10">  
+                                <h:outputText value="Se debe seleccionar un archivo de texto separado por comas (csv) que contenga
+                                              los puntos (x , y) ordenados consecutivamente. "/>
+                                <p:growl id="messages" showDetail="true"/>  
+
+                                <p:fileUpload fileUploadListener="#{mainPageBean.handleFileUpload}"   
+                                              allowTypes="*.*;" description="Images"  update="messages"/>                                    
+                            </h:panelGrid>                                  
+                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                        </p:tab>  
+
+                        <p:tab title="Toda la ventana disponible">  
+                            <h:panelGrid columns="2" cellpadding="10">  
+                                <p:commandButton  value="Calcular" actionListener="#{mainPageBean.allAvailableWindow}" onclick="pbAjax.start();startButton1.disable();"    widgetVar="startButton1" update="grid"/>
+                                <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton" />
+                                <h:outputLabel  value="Progreso" /> 
+
+                                <p:progressBar widgetVar="pbAjax" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton1.enable();nextButton.enable();" interval="4000"  />
+
+                            </h:panelGrid>
+                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                        </p:tab>  
+
+                    </p:tabView>  
+
+
+                </p:panel>
             </h:panelGrid>
-            
-            
+
+
         </h:form>
     </h:body>
 </html>
