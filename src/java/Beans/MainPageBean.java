@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -29,7 +29,7 @@ import org.primefaces.model.map.Marker;
  * @author carlos
  */
 @ManagedBean(name = "mainPageBean")
-@SessionScoped
+@ViewScoped
 public class MainPageBean extends MainPageALBean implements Serializable {
 
     public Integer getProgress() {
@@ -195,13 +195,13 @@ public class MainPageBean extends MainPageALBean implements Serializable {
         List<String> cuencasSource = new ArrayList<String>();  
         List<String> cuencasTarget = new ArrayList<String>();  
         List<Stations> stations = MainPageUtils.getStations();
-         cuencasTarget = MainPageUtils.getCuencas();            
+         cuencasSource = MainPageUtils.getCuencas();            
         cuencaslist = new DualListModel<String>(cuencasSource, cuencasTarget); 
          //LatLng coord= new LatLng(16.11542, -95.122893);
          //emptyModel.addOverlay(new Marker(coord, "Konyaalti"));
         for (int i = 0 ; i< stations.size(); i++){
             LatLng coord = new LatLng(Double.valueOf(stations.get(i).getY()), Double.valueOf(stations.get(i).getX()));  
-             emptyModel.addOverlay(new Marker(coord , stations.get(i).getName()));  
+             emptyModel.addOverlay(new Marker(coord , stations.get(i).getName(),null, "img/station.png"));  
         }
              
     }

@@ -15,14 +15,14 @@
             <img    src="img/logounamP.jpg" align="right" />
         </h:panelGroup>
         <br/><br/><br/><br/><br/><br></br>
-
-        <div> <p:messages id="messages">  
+        <p:panel id="pnl" header="Mensajes de Notificación" toggleable="true" closable="true"  >
+        <div><p:messages id="messages">  
                 <p:effect type="pulsate" event="load">  
                     <f:param name="mode" value="'show'" />  
                 </p:effect>  
             </p:messages>  
         </div>
-
+        </p:panel>
         <div>                   
             <a href="#{displayImagesBean.zipTxtFileName}" >Descargar datos</a>
             <a href="#{displayImagesBean.zipImgFileName}">Descargar Imagenes</a>                                    
@@ -35,7 +35,7 @@
                 <p:commandButton title="Hora siguiente" type="button" onclick="switcher.next();"  
                                  image="ui-icon ui-icon-circle-triangle-e"/>  
                 <p:imageSwitch effect="fade" widgetVar="switcher" slideshowAuto="true" >  
-                    <ui:repeat value="#{mainPageBean.asimImages}" var="image1">  
+                    <ui:repeat value="#{displayImagesBean.asimImages}" var="image1">  
                         <p:graphicImage value="#{image1}" />  
                     </ui:repeat>  
                 </p:imageSwitch>              
@@ -53,8 +53,8 @@
                 
             </p:panel>
 
-        </h:panelGrid>
-        </h:form>
+        </h:panelGrid>       
+        </h:form>        
     </h:body>
 </html>
 

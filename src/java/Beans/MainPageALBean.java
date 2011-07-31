@@ -201,7 +201,7 @@ public class MainPageALBean {
                     thereAreErrors = true;
                 }
                 errorAnalysisFiles.add(errorFile);
-            }
+            }progress=100;
 
             //Save error messages
             if (thereAreErrors == false) {
@@ -346,7 +346,7 @@ public class MainPageALBean {
             }
             errorAnalysisFiles.add(errorFile);
 
-        }
+        } progress = 100;
         //Save error messages
         if (thereAreErrors == false) {
             errorMessages += "No hubo ningún error <br>\n";

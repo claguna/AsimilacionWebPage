@@ -7,10 +7,8 @@ package Beans;
 import Graphs.StationData;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +34,8 @@ public class DisplayImagesBean implements Serializable {
     
      public StreamedContent file;  
     public String zipTxtFileName, zipImgFileName;
-
+    private ArrayList<String> asimImages;
+        
     public StreamedContent getFile() {  
         return file;  
     }
@@ -106,7 +105,7 @@ public class DisplayImagesBean implements Serializable {
     public DisplayImagesBean() {
        zipTxtFileName =  (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ziptxtFilesName");
        zipImgFileName = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("zipimgFilesName");
-
+       asimImages =(ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ImgFiles");
         ArrayList<String>errorFiles= (ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("errorFiles");
        // if(errorFiles!=null)
          //   prepareGraphs(errorFiles);
@@ -153,6 +152,20 @@ public class DisplayImagesBean implements Serializable {
 
     public void setSelectedStation(String selectedStation) {
         this.selectedStation = selectedStation;
+    }
+
+    /**
+     * @return the asimImages
+     */
+    public ArrayList<String> getAsimImages() {
+        return asimImages;
+    }
+
+    /**
+     * @param asimImages the asimImages to set
+     */
+    public void setAsimImages(ArrayList<String> asimImages) {
+        this.asimImages = asimImages;
     }
     
 }
