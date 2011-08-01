@@ -10,18 +10,15 @@
     </h:head>
     <h:body>
         <h:form >
-        <h:panelGroup style="width: 960px; border:0; ">
+        <h:panelGroup style="width: 940px; border:0; ">
             <img     src="img/logomatemP.jpg" align="left"  />
             <img    src="img/logounamP.jpg" align="right" />
         </h:panelGroup>
         <br/><br/><br/><br/><br/><br></br>
-        <p:panel id="pnl" header="Mensajes de Notificación" toggleable="true" closable="true"  >
-        <div><p:messages id="messages">  
-                <p:effect type="pulsate" event="load">  
-                    <f:param name="mode" value="'show'" />  
-                </p:effect>  
-            </p:messages>  
-        </div>
+        <p:panel id="pnl" header="Mensajes de Notificación" toggleable="true" closable="true"   >
+            <h:outputText  /> 
+            #{displayImagesBean.notificationMessages}
+             <p:effect type="pulsate" event="load" />  
         </p:panel>
         <div>                   
             <a href="#{displayImagesBean.zipTxtFileName}" >Descargar datos</a>

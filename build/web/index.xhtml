@@ -90,16 +90,16 @@
         </script>
     </h:head>
 
-    <h:body onload="startButton1.enable(); nextButton.disable();nextButton1.disable();" >
+    <h:body onload="startButton1.enable();startButton2.enable();verResultadosButton.disable();" >
         <h:form onsubmit="">
-            <h:panelGroup style="width: 960px; border:0; ">
+            <p:layoutUnit id="top" position="north" size="50">            
                 <img     src="img/logomatemP.jpg" align="left"  />
-                <img    src="img/logounamP.jpg" align="right" />
-            </h:panelGroup>
+                <img    src="img/logounamP.jpg" style="position:absolute; left:1250px;" />            
+             </p:layoutUnit>
 
             <br></br><br></br><br></br><br></br><br></br><br></br>
             <h:outputLabel style="font-family:arial;color:red;font-size:20px;">Asimilación</h:outputLabel>
-            <p:panel   >
+            <p:panel  style="width: 1318px; " >
                 Descripción
 
 
@@ -122,11 +122,9 @@
                         <h:selectOneMenu  value="#{mainPageBean.endHour}"  >
                             <f:selectItems value="#{mainPageBean.availableHours}" />                                                                          
                         </h:selectOneMenu>
-
-                        <p:message for="endCalendar" />   
-                        <p:message for="startCalendar" />                                                                          
-
+                         
                     </h:panelGrid>
+                    <p:messages id="msgs" showDetail="true" />  
                     <br></br>
                     <h:outputLabel>A continuación se muestran los días disponibles en rojo</h:outputLabel>
                     <br></br><br></br>
@@ -144,24 +142,18 @@
 
                             <f:view contentType="text/html">
                                 <p:gmap center="16.11542, -95.122893" disableDoubleClickZoom="true" zoom="7" type="TERRAIN"   
-                                        style="width:600px;height:400px"   
+                                        style="width:655px;height:400px"   
                                         mapTypeControl="false" navigationControl="false" model="#{mainPageBean.emptyModel}" 
                                         onPointClick="handlePointClick(event);"  widgetVar="map" streetView="false"
                                         overlaySelectListener="#{mainPageBean.emptyModel}"  />  
                             </f:view>
                             <br></br>                             
-                            <p:commandButton value="Continuar" actionListener="#{mainPageBean.gmailPolygon}" onclick="pbAjax1.start();startButton2.disable();"    widgetVar="startButton2"/>
-                            <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton1" />
-                            <h:outputLabel  value="Progreso" /> 
-                            <br></br>     <br></br> 
-                            <p:progressBar widgetVar="pbAjax1" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton2.enable();nextButton1.enable();" interval="4000"  />
-
+                            <p:commandButton value="Continuar" actionListener="#{mainPageBean.gmailPolygon}" onclick="pbAjax.start();startButton2.disable();"    widgetVar="startButton2" update="msgs" onsuccess="startButton2.enable();" />
                             <br/>
                             <h:outputText id="mensaje" value="#{mainPageBean.mensaje}"/>
                             <p:dialog widgetVar="dlg" effect="FADE" effectDuration="0.5" close="false" fixedCenter="true">                                                    
                                 <h:panelGrid columns="2">
-                                    <h:outputLabel for="title" value="Title:" />
-                                    <p:inputText id="title" value="Añadir punto" />
+                                    <h:outputLabel for="title" value="Añadir punto" />                                  
 
                                     <f:facet name="footer">
                                         <p:commandButton value="Add" 
@@ -203,24 +195,26 @@
 
                         <p:tab title="Toda la ventana disponible">  
                             <h:panelGrid columns="2" cellpadding="10">  
-                                <p:commandButton  value="Calcular" actionListener="#{mainPageBean.allAvailableWindow}" onclick="pbAjax.start();startButton1.disable();"    widgetVar="startButton1" update="grid"/>
-                                <p:commandButton value="Ver Resultados"  action="#{mainPageBean.nextWindow}"  ajax="false" widgetVar="nextButton" />
-                                <h:outputLabel  value="Progreso" /> 
-
-                                <p:progressBar widgetVar="pbAjax" ajax="true" value="#{mainPageBean.progress}"  style="width:300px" oncomplete="startButton1.enable();nextButton.enable();" interval="4000"  />
-
+                                <p:commandButton value="Continuar" actionListener="#{mainPageBean.allAvailableWindow}" onclick="pbAjax.start();startButton1.disable();"    widgetVar="startButton1" update="msgs" oncomplete="startButton1.enable();" />
+                                
                             </h:panelGrid>
                             <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
                             <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
                         </p:tab>  
 
                     </p:tabView>  
-
-
+                    <h:panelGrid columns="2" id="grid2" >
+                        <p:commandButton immediate="true" value="Ver datos" widgetVar="verResultadosButton" ajax="false" action="displayImages.xhtml"/>                        
+                            <p:progressBar widgetVar="pbAjax" ajax="true" value="#{mainPageBean.progress}"  style="width:500px"   oncomplete="startButton1.enable();startButton2.enable();verResultadosButton.enable();" interval="4000"  />
+                     </h:panelGrid>
                 </p:panel>
             </h:panelGrid>
-
-
+            <p:layoutUnit id="bottom" position="south" >
+                <h:panelGrid columns="2" id="grid3" cellpadding="5" cellspacing="8" >
+                        <h:outputLink  value="credits.xhtml">Creditos</h:outputLink>                                              
+                        <h:outputLink  value="adminLogin.xhtml">  Acceder como administrador </h:outputLink>                                
+                 </h:panelGrid>
+            </p:layoutUnit>
         </h:form>
     </h:body>
 </html>

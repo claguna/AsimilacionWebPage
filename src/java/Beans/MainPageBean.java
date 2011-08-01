@@ -32,6 +32,14 @@ import org.primefaces.model.map.Marker;
 @ViewScoped
 public class MainPageBean extends MainPageALBean implements Serializable {
 
+    public boolean getCanWeGoToNextPage() {
+        return canWeGoToNextPage;
+    }
+
+    public void setCanWeGoToNextPage(boolean canWeGoToNextPage) {
+        this.canWeGoToNextPage = canWeGoToNextPage;
+    }
+
     public Integer getProgress() {
           if(progress == 0)  
             progress = 0;          
@@ -149,6 +157,14 @@ public class MainPageBean extends MainPageALBean implements Serializable {
     public void setImages(ArrayList<DefaultStreamedContent> images) {
         this.images = images;
     }
+
+    public boolean isEnabledComputeButton() {
+        return enabledComputeButton;
+    }
+
+    public void setEnabledComputeButton(boolean enabledComputeButton) {
+        this.enabledComputeButton = enabledComputeButton;
+    }
     
     
     
@@ -164,7 +180,7 @@ public class MainPageBean extends MainPageALBean implements Serializable {
         
         emptyModel = new DefaultMapModel();      
         cuencas.add("Chicoasen");
-        
+        progress=0;
         availableHours = new ArrayList<SelectItem>();
         availableHours.add(new SelectItem("1", "1:00"));
         availableHours.add(new SelectItem("2", "2:00"));

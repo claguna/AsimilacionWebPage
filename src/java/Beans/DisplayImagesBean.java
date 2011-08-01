@@ -17,6 +17,7 @@ import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.model.StreamedContent;
@@ -31,10 +32,18 @@ public class DisplayImagesBean implements Serializable {
     private ArrayList<SelectItem> availableStations;
     private String selectedStation;
     private List<StationData> series;
-    
+    public String NotificationMessages="";
      public StreamedContent file;  
     public String zipTxtFileName, zipImgFileName;
     private ArrayList<String> asimImages;
+
+    public String getNotificationMessages() {
+        return NotificationMessages;
+    }
+
+    public void setNotificationMessages(String NotificationMessages) {
+        this.NotificationMessages = NotificationMessages;
+    }
         
     public StreamedContent getFile() {  
         return file;  
@@ -105,7 +114,9 @@ public class DisplayImagesBean implements Serializable {
     public DisplayImagesBean() {
        zipTxtFileName =  (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ziptxtFilesName");
        zipImgFileName = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("zipimgFilesName");
-       asimImages =(ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ImgFiles");
+       NotificationMessages = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("errorMessages");
+       asimImages =(ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("ImgFiles");      
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,null, errorMessages));         
         ArrayList<String>errorFiles= (ArrayList<String>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("errorFiles");
        // if(errorFiles!=null)
          //   prepareGraphs(errorFiles);

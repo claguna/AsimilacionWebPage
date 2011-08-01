@@ -49,8 +49,10 @@ public class MainPageALBean {
     public ArrayList<String> asimImages;
     private static int BUFFER_SIZE = 512;
     public Integer progress = 0;
-    private String errorMessages = "Mensajes de notificación <br>\n";
+    private String errorMessages = "Mensajes de notificación\n";
     public DualListModel<String> cuencaslist;
+    public boolean canWeGoToNextPage =false;
+    public boolean enabledComputeButton=true;
     
     public void addMessage(FacesMessage message) {
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -127,7 +129,9 @@ public class MainPageALBean {
     }
 
     public String gmailPolygon() {
+        enabledComputeButton = false;
         FileWriter outFile = null;
+        String WebPageValidationErrors="";
         try {
             String startDate_s, startHour_s, endDate_s, endHour_s;
             Calendar sdate = Calendar.getInstance();
@@ -137,8 +141,9 @@ public class MainPageALBean {
             Boolean thereAreErrors = false;
             String msg = "";
             ArrayList<String> images = new ArrayList<String>();            
-            if (startDate != null && endDate != null) {
-                msg = "Entrando al action " + startDate.toString() + " " + startHour + " " + endDate.toString() + " " + endHour;
+            if (startDate == null || endDate == null) {//We don't have any dates
+                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", " Debe Introducir las fechas"));  
+                return "";               
             }
             for (int i = 0; i < polygon.size(); i++) {
                 msg += polygon.get(i).toString() + " ";
@@ -160,7 +165,10 @@ public class MainPageALBean {
                  }
             }
             fpol.close();
-
+            if(polygon.size()+ cuencaslist.getTarget().size() <3){                
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", " Revise que haya seleccionado mas de 2 puntos"));  
+                return "";
+            }
             //Get array of hours
             startDate.setHours(Integer.valueOf(startHour));
             endDate.setHours(Integer.valueOf(endHour));
@@ -170,6 +178,10 @@ public class MainPageALBean {
             sdate.add(Calendar.MONTH, 1);
             edate.add(Calendar.MONTH, 1);
             hours = getHoursInInterval(sdate, edate);
+            if(hours.isEmpty()){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Revise que las fechas sean las adecuadas"));  
+                return "";
+            }
             // For each hour Run Asimilacion
             String imgAsimilacion = "";
             String fileAsimilacion = "";
@@ -197,7 +209,7 @@ public class MainPageALBean {
                     asimilacionfiles.add(errorFile);
 
                 } else {
-                    errorMessages += "No hay datos para la hora " + h + "\n </br>";
+                    errorMessages += "No hay datos para la hora " + h + ".  ";
                     thereAreErrors = true;
                 }
                 errorAnalysisFiles.add(errorFile);
@@ -205,10 +217,9 @@ public class MainPageALBean {
 
             //Save error messages
             if (thereAreErrors == false) {
-                errorMessages += "No hubo ningún error <br>\n";
+                errorMessages += "No hubo ningún error .";
             }
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("errorMessages", errorMessages);
             //Clean Previous info
             if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().containsKey("ziptxtFilesName")) {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ziptxtFilesName");
@@ -219,6 +230,7 @@ public class MainPageALBean {
             }
             if (asimilacionfiles.size() > 0) {
                 //Save files into Session
+                
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("txtFiles", asimilacionfiles);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ImgFiles", asimImages);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("errorFiles", errorAnalysisFiles);
@@ -236,12 +248,12 @@ public class MainPageALBean {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ziptxtFilesName", ziptxt);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("zipimgFilesName", zipimg);
             }
-
+            canWeGoToNextPage=true;
             return "displayImages";
         } catch (IOException ex) {
             Logger.getLogger(MainPageALBean.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-
+            enabledComputeButton = true;
             try {
                 outFile.close();
             } catch (IOException ex) {
@@ -295,13 +307,20 @@ public class MainPageALBean {
     }
 
     public String allAvailableWindow() {
+        enabledComputeButton = false;
         String startDate_s, startHour_s, endDate_s, endHour_s;
         Calendar sdate = Calendar.getInstance();
         Calendar edate = Calendar.getInstance();
         ArrayList<String> hours = new ArrayList<String>();
         ArrayList<String> errorAnalysisFiles = new ArrayList<String>();
         Boolean thereAreErrors = false;
-
+        String   WebPageValidationErrors="";
+        if (startDate == null || endDate == null) {//We don't have any dates
+               WebPageValidationErrors = "Debe Introducir las fechas";      
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", WebPageValidationErrors));  
+               canWeGoToNextPage=false;
+                return "";
+        }
         //Get array of hours
         startDate.setHours(Integer.valueOf(startHour));
         endDate.setHours(Integer.valueOf(endHour));
@@ -321,9 +340,14 @@ public class MainPageALBean {
 
         asimImages.clear();
         asimilacionfiles.clear();
-        String tmp_Date, tmp_Hour;
-        progress = 5;
+        String tmp_Date, tmp_Hour;        
         errorMessages = "";
+        if(hours.isEmpty()){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Revise que las fechas sean las adecuadas"));  
+                canWeGoToNextPage=false;
+                return "";
+        }
+        progress = 5;
         for (String h : hours) {
             tmp_Date = h.substring(0, 10);
             tmp_Hour = h.substring(10, h.length());
@@ -341,7 +365,7 @@ public class MainPageALBean {
                 asimilacionfiles.add(errorFile);
 
             } else {
-                errorMessages += "No hay datos para la hora " + h + "\n </br>";
+                errorMessages += "No hay datos para la hora " + h + ". ";
                 thereAreErrors = true;
             }
             errorAnalysisFiles.add(errorFile);
@@ -349,10 +373,9 @@ public class MainPageALBean {
         } progress = 100;
         //Save error messages
         if (thereAreErrors == false) {
-            errorMessages += "No hubo ningún error <br>\n";
+            errorMessages += "No hubo ningún error.";
         }
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("errorMessages", errorMessages);
         //Clean Previous info
         if (FacesContext.getCurrentInstance().getExternalContext().getSessionMap().containsKey("ziptxtFilesName")) {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("ziptxtFilesName");
@@ -380,13 +403,14 @@ public class MainPageALBean {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("ziptxtFilesName", ziptxt);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("zipimgFilesName", zipimg);
         }
-
+        canWeGoToNextPage=true;
+        enabledComputeButton = true;
         return "displayImages";
     }
 
     public String nextWindow() {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, errorMessages, null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,null, errorMessages));    
         return "displayImages";
     }
 
