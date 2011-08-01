@@ -21,7 +21,7 @@ import org.primefaces.context.RequestContext;
 public class loginBean {
      private String username;        
     private String password;  
-
+    boolean loggedIn = false;  
     /** Creates a new instance of loginBean */
     public loginBean() {
     }
@@ -41,22 +41,30 @@ public class loginBean {
     public void setUsername(String username) {
         this.username = username;
     }
-    
+    public String redirectLogin(){
+        if(loggedIn){
+             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("admLogged","true");
+            return "adminMainPage?faces-redirect=true";
+        }
+        else 
+            return "";
+    }
      public void login(ActionEvent actionEvent) { 
          RequestContext context = RequestContext.getCurrentInstance();  
         FacesMessage msg = null;  
-        boolean loggedIn = false;  
+        
           
         if(username != null  && username.equals("admin") && password != null  && password.equals("admin")) {  
             loggedIn = true;  
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", username);  
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido", username);              
         } else {  
             loggedIn = false;  
-            msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "Invalid credentials");  
+            msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Acceso no permitido", "Sus credenciales no son válidas");  
         }  
           
         FacesContext.getCurrentInstance().addMessage(null, msg);  
-        context.addCallbackParam("loggedIn", loggedIn);  
+        
+      //  context.addCallbackParam("loggedIn", loggedIn);  
          
      }
 }

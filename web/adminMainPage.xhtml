@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Administración</title>            
+    </h:head>
+    <h:body>
+         <p:growl id="messages" showDetail="true"/>  
+         <p:layoutUnit id="top" position="north" size="50">            
+            <img     src="img/logomatemP.jpg" align="left"  />
+            <img    src="img/logounamP.jpg" style="position:absolute; left:1250px;" />            
+        </p:layoutUnit>
+        <br></br><br></br><br></br><br></br><br></br><br></br>
+        <p:tabView collapsible="true" style="width: 500px">
+            <p:tab title="Subir nuevas fechas">
+                <h:form id="myform" enctype="multipart/form-data">
+                 <h:outputLabel  value="Seleccione el archivo txt que se desea subir " />  
+                 <p:growl id="messages" showDetail="true"/>  
+                     <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}"   
+    multiple="true" label="choose" allowTypes="csv" description="Images"/>
+                    </h:form>
+              </p:tab>
+         </p:tabView>
+    </h:body>
+</html>
+

@@ -276,9 +276,10 @@ public class MainPageALBean {
 
         FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String deploymentDirectoryPath = ctx.getRealPath("/");
 
-
-        File result = new File("/tmp/" + event.getFile().getFileName());
+        File result = new File(deploymentDirectoryPath+"/uploads/" + event.getFile().getFileName());
 
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(result);
@@ -413,7 +414,9 @@ public class MainPageALBean {
          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,null, errorMessages));    
         return "displayImages";
     }
-
+    public String gotoAdminLoginPage(){
+        return "adminLogin.xhtml";
+    }
     /**
      * @return the cuencaslist
      */

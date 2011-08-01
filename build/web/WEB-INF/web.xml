@@ -22,7 +22,7 @@
  </init-param>
  <init-param>
   <param-name>uploadDirectory</param-name>
-  <param-value>/tmp</param-value>
+  <param-value>uploads</param-value>
  </init-param>
 </filter>
 <filter-mapping>
@@ -46,6 +46,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>faces/index.xhtml </welcome-file>
     </welcome-file-list>
 </web-app>

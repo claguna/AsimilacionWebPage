@@ -1,29 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.prime.com.tr/ui"    
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>Entrar como administrador</title> 
     </h:head>    
     <h:body>
-        <p:panel id="top" >            
-                <img     src="img/logomatemP.jpg" align="left"  />
-                <img    src="img/logounamP.jpg" style="position:absolute; left:1250px;" />            
-        </p:panel>
+        <p:layoutUnit id="top" position="north" size="50">            
+            <img     src="img/logomatemP.jpg" align="left"  />
+            <img    src="img/logounamP.jpg" style="position:absolute; left:1250px;" />            
+        </p:layoutUnit>
         <br></br><br></br><br></br><br></br><br></br><br></br>
         <h:form>                
-            <h3>Acceder al sistema como administrador</h3>
+            <h3>Bienvenido a Asimilación</h3>            
+            <p:separator  /> 
+            <p:growl id="growl" showDetail="true" life="3000" />  
+  
             
-            <p:panel header="Ingrese sus credenciales" footer="Visca el Barca!">  
-                <h:outputText value="FC Barcelona is ..." />  
-            </p:panel>  
-                       
-            
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:panel header="Ingrese sus credenciales" >  
+                    <h:panelGrid columns="2" cellpadding="5">  
+                        <h:outputLabel for="username" value="Usuario: *" />  
+                        <p:inputText value="#{loginBean.username}"   
+                                     id="username" required="true" label="username" />  
 
-                  
-            
+                        <h:outputLabel for="password" value="Contraseña: * " />  
+                        <h:inputSecret value="#{loginBean.password}"   
+                                       id="password" required="true" label="password" />  
+
+                        <f:facet name="footer">  
+                            <p:commandButton value="Acceder" update="growl" action="#{loginBean.redirectLogin}" actionListener="#{loginBean.login}"/>  
+                        </f:facet>  
+                    </h:panelGrid> 
+                      
+                </p:panel>  
+                <p:panel>
+                    Como Administrador usted podrá subir información nueva a la base de datos
+                </p:panel>
+            </h:panelGrid>
+
         </h:form>  
     </h:body>
 </html>
