@@ -23,6 +23,7 @@ import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
+import org.primefaces.model.map.Polygon;
 
 /**
  *
@@ -217,16 +218,38 @@ public class MainPageBean extends MainPageALBean implements Serializable {
          //emptyModel.addOverlay(new Marker(coord, "Konyaalti"));
         for (int i = 0 ; i< stations.size(); i++){
             LatLng coord = new LatLng(Double.valueOf(stations.get(i).getY()), Double.valueOf(stations.get(i).getX()));  
-             emptyModel.addOverlay(new Marker(coord , stations.get(i).getName(),null, "img/station.png"));  
+            emptyModel.addOverlay(new Marker(coord , stations.get(i).getName(),null, "img/station.png"));  
         }
-             
+//        theWholeWindowGmap = new DefaultMapModel();    
+//          //Shared coordinates  
+//        LatLng coord1 = new LatLng(13, -98.971832);  
+//        LatLng coord2 = new LatLng(13, -91.30986 );  
+//        LatLng coord4 = new LatLng(18.92,-98.971832);
+//        LatLng coord3 = new LatLng(18.92,-91.30986 );
+//  
+//        //Polygon  
+//        Polygon polygon = new Polygon();  
+//        polygon.getPaths().add(coord1);  
+//        polygon.getPaths().add(coord2);  
+//        polygon.getPaths().add(coord3);  
+//        polygon.getPaths().add(coord4);  
+//  
+//        polygon.setStrokeColor("#FF9900");  
+//        polygon.setFillColor("#FF9900");  
+//        polygon.setStrokeOpacity(0.7);  
+//        polygon.setFillOpacity(0.7);  
+//          
+        //theWholeWindowGmap.addOverlay(polygon); 
+         //emptyModel.addOverlay(polygon); 
     }
-    
-    
-    
-    
-    
-    
+
+    public MapModel getTheWholeWindowGmap() {
+        return theWholeWindowGmap;
+    }
+
+    public void setTheWholeWindowGmap(MapModel theWholeWindowGmap) {
+        this.theWholeWindowGmap = theWholeWindowGmap;
+    }
     
        private String nombre;
     private String mensaje;

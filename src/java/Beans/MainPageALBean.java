@@ -40,6 +40,7 @@ public class MainPageALBean {
     public Date startDate, endDate;
     public String startHour = "", endHour = "";
     public MapModel emptyModel;
+    public MapModel theWholeWindowGmap;
     public double lat, lon;
     public ArrayList<SelectItem> availableHours;
     public ArrayList<Point2D.Double> polygon;

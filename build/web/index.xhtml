@@ -11,8 +11,8 @@
         <style type="text/css">@media print{.gmnoprint{display:none}}@media screen{.gmnoscreen{display:none}}</style>
         <title>Asimilacion 2</title>
         <script src="http://maps.google.com/maps/api/js?sensor=false" />
-            
-        
+
+
         <script type="text/javascript">             
                 var currentMarker = null;
 	
@@ -91,7 +91,7 @@
             <p:layoutUnit id="top" position="north" size="50">            
                 <img     src="img/logomatemP.jpg" align="left"  />
                 <img    src="img/logounamP.jpg" style="position:absolute; left:1250px;" />            
-             </p:layoutUnit>
+            </p:layoutUnit>
 
             <br></br><br></br><br></br><br></br><br></br><br></br>
             <h:outputLabel style="font-family:arial;color:red;font-size:20px;">Asimilación</h:outputLabel>
@@ -118,7 +118,7 @@
                         <h:selectOneMenu  value="#{mainPageBean.endHour}"  >
                             <f:selectItems value="#{mainPageBean.availableHours}" />                                                                          
                         </h:selectOneMenu>
-                         
+
                     </h:panelGrid>
                     <p:messages id="msgs" showDetail="true" />  
                     <br></br>
@@ -131,8 +131,9 @@
                     <p:pickList value="#{mainPageBean.cuencaslist}"  var="cuenca"  itemLabel="#{cuenca}"  itemValue="#{cuenca}" />  
 
                 </p:panel>
+                
                 <p:panel  >
-                    <p:tabView collapsible="true">        
+                    <p:tabView style="height:500px">        
                         <p:tab title="Poligono desde google maps">
                             <p:growl id="growl" life="3000"/> 
 
@@ -163,20 +164,15 @@
                                 <h:inputHidden id="lat" value="#{mainPageBean.lat}" />
                                 <h:inputHidden id="lng" value="#{mainPageBean.lon}" />                                                    
                             </p:dialog>
-
                         </p:tab>
 
                         <p:tab title="Cuenca predefinida">  
-
                             <h:selectOneMenu>
                                 <f:selectItems value="#{mainPageBean.cuencas}" />
                             </h:selectOneMenu>
-
-                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
                         </p:tab>  
 
                         <p:tab title="Poligono definido por el usuario">  
-
                             <h:panelGrid columns="2" cellpadding="10">  
                                 <h:outputText value="Se debe seleccionar un archivo de texto separado por comas (csv) que contenga
                                               los puntos (x , y) ordenados consecutivamente. "/>
@@ -185,31 +181,27 @@
                                 <p:fileUpload fileUploadListener="#{mainPageBean.handleFileUpload}"   
                                               allowTypes="csv" description="Images"  update="messages"/>                                    
                             </h:panelGrid>                                  
-                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
                         </p:tab>  
 
-                        <p:tab title="Toda la ventana disponible">  
-                            <h:panelGrid columns="2" cellpadding="10">  
-                                <p:commandButton value="Continuar" actionListener="#{mainPageBean.allAvailableWindow}" onclick="pbAjax.start();startButton1.disable();"    widgetVar="startButton1" update="msgs" oncomplete="startButton1.enable();" />
-                                
-                            </h:panelGrid>
-                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                        <p:tab title="Toda la ventana disponible"  >                                                             
+                            <p:graphicImage value="img/theWholeWindow.jpg" />     <br></br><br></br>
+                            <p:commandButton value="Continuar" actionListener="#{mainPageBean.allAvailableWindow}" onclick="pbAjax.start();startButton1.disable();"    widgetVar="startButton1" update="msgs" oncomplete="startButton1.enable();" />                                                            
                         </p:tab>  
-
-                    </p:tabView>  
+                        
+                    </p:tabView> 
+                    
+                    
                     <h:panelGrid columns="2" id="grid2" >
                         <p:commandButton immediate="true" value="Ver datos" widgetVar="verResultadosButton" ajax="false" action="displayImages.xhtml"/>                        
-                            <p:progressBar widgetVar="pbAjax" ajax="true" value="#{mainPageBean.progress}"  style="width:500px"   oncomplete="startButton1.enable();startButton2.enable();verResultadosButton.enable();" interval="4000"  />
-                     </h:panelGrid>
+                        <p:progressBar widgetVar="pbAjax" ajax="true" value="#{mainPageBean.progress}"  style="width:500px"   oncomplete="startButton1.enable();startButton2.enable();verResultadosButton.enable();" interval="4000"  />
+                    </h:panelGrid>
                 </p:panel>
             </h:panelGrid>
             <p:layoutUnit id="bottom" position="south" >
                 <h:panelGrid columns="2" id="grid3" cellpadding="5" cellspacing="8" >
-                         <p:commandLink  action ="credits.xhtml" value="Créditos" ajax="false"/>
-                         <p:commandLink action="adminLogin.xhtml" value="Entrar como administrador" ajax="false" />
-                 </h:panelGrid>
+                    <p:commandLink  action ="credits.xhtml" value="Créditos" ajax="false"/>
+                    <p:commandLink action="adminLogin.xhtml" value="Entrar como administrador" ajax="false" />
+                </h:panelGrid>
             </p:layoutUnit>
         </h:form>
     </h:body>
